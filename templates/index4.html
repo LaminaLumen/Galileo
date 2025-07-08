@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechInspire | 技术灵感博客</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Google风格的主题颜色 */
+        :root {
+            --google-blue: #4285f4;
+            --google-red: #ea4335;
+            --google-yellow: #fbbc05;
+            --google-green: #34a853;
+            --google-font: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            --light-gray: #f8f9fa;
+            --dark-gray: #5f6368;
+            --text-dark: #202124;
+            --card-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--google-font);
+            line-height: 1.6;
+            color: var(--text-dark);
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f7fa;
+        }
+
+        /* 背景设置 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.96;
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+
+        body.custom-bg1::before {
+            background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3');
+        }
+
+        body.custom-bg2::before {
+            background-image: url('https://images.unsplash.com/photo-1555099962-4199c345e5dd?ixlib=rb-4.0.3');
+        }
+
+        body.custom-bg3::before {
+            background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3');
+        }
+
+        /* 头部导航 */
+        header {
+            background-color: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 14px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.6rem;
+        }
+
+        .logo span {
+            color: var(--google-blue);
+        }
+
+        .logo .red {
+            color: var(--google-red);
+        }
+
+        .logo .yellow {
+            color: var(--google-yellow);
+        }
+
+        .logo .green {
+            color: var(--google-green);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 22px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--google-blue);
+            background-color: rgba(66, 133, 244, 0.12);
+        }
+
+        /* 主内容区 */
+        main {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 35px 5% 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .articles-section {
+            flex: 5;
+            min-width: 300px;
+            padding-right: 30px;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 12px;
+            color: var(--google-blue);
+        }
+
+        .sidebar {
+            flex: 2;
+            min-width: 250px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 28px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 两种风格的卡片样式 */
+        /* 风格一：带图片的卡片（如图一） */
+        .article-card.with-image {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card.with-image .article-image {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .article-card.with-image .article-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .article-card.with-image:hover .article-image img {
+            transform: scale(1.05);
+        }
+
+        .article-card.with-image .article-content {
+            padding: 22px 25px;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+        }
+
+        .article-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: var(--google-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* 风格二：无图片卡片（如图二） */
+        .article-card.without-image {
+            padding: 30px 35px;
+        }
+
+        .article-card.without-image .article-meta {
+            margin-bottom: 8px;
+        }
+
+        .article-card.without-image h2 {
+            font-size: 1.9rem;
+            margin: 12px 0 18px;
+            line-height: 1.4;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .article-card.without-image .article-excerpt {
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 18px 0;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .tag:hover {
+            transform: translateY(-2px);
+        }
+
+        .tag-web {
+            background-color: rgba(66, 133, 244, 0.12);
+            color: var(--google-blue);
+        }
+
+        .tag-dev {
+            background-color: rgba(52, 168, 83, 0.12);
+            color: var(--google-green);
+        }
+
+        .tag-design {
+            background-color: rgba(251, 188, 5, 0.12);
+            color: #b06d00;
+        }
+
+        .tag-ai {
+            background-color: rgba(234, 67, 53, 0.12);
+            color: var(--google-red);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin: 14px 0 8px;
+            color: var(--text-dark);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .article-card:hover h2 {
+            color: var(--google-blue);
+        }
+
+        .article-excerpt {
+            margin: 15px 0 18px;
+            color: var(--dark-gray);
+            line-height: 1.75;
+            font-size: 1.02rem;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--google-blue);
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-top: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .read-more i {
+            margin-left: 8px;
+            transition: transform 0.3s;
+        }
+
+        .read-more:hover {
+            background-color: #3367d6;
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .read-more:hover i {
+            transform: translateX(4px);
+        }
+
+        /* 侧边栏卡片样式 */
+        .profile-card .profile-header {
+            padding: 22px;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: var(--google-green);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1.15rem;
+        }
+
+        .profile-title {
+            font-size: 0.92rem;
+            color: var(--dark-gray);
+        }
+
+        .profile-stats {
+            display: flex;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--dark-gray);
+            margin-top: 4px;
+        }
+
+        .profile-bio {
+            padding: 16px 20px;
+            font-size: 0.93rem;
+            line-height: 1.7;
+            color: var(--dark-gray);
+        }
+
+        .categories-card, .subscribe-card {
+            padding: 25px;
+        }
+
+        .categories-title, .subscribe-title {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+
+        .category {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+        }
+
+        .category:last-child {
+            border-bottom: none;
+        }
+
+        .category-name {
+            font-size: 0.98rem;
+        }
+
+        .category-count {
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+        }
+
+        .subscribe-card p {
+            font-size: 0.95rem;
+            color: var(--dark-gray);
+            margin: 15px 0 22px;
+            line-height: 1.7;
+        }
+
+        .subscribe-form {
+            display: flex;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .subscribe-form input {
+            flex: 1;
+            padding: 14px 18px;
+            border: none;
+            font-family: var(--google-font);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .subscribe-form input:focus {
+            outline: none;
+            background: white;
+        }
+
+        .subscribe-form button {
+            background-color: var(--google-green);
+            color: white;
+            border: none;
+            padding: 0 22px;
+            cursor: pointer;
+            font-family: var(--google-font);
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .subscribe-form button:hover {
+            background-color: #2c8e46;
+        }
+
+        /* 背景切换控制 */
+        .bg-controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .bg-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .bg-btn:hover, .bg-btn.active {
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .bg-default {
+            background-image: url('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-4.0.3');
+        }
+
+        .bg-1 {
+            background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3');
+        }
+
+        .bg-2 {
+            background-image: url('https://images.unsplash.com/photo-1555099962-4199c345e5dd?ixlib=rb-4.0.3');
+        }
+
+        .bg-3 {
+            background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3');
+        }
+
+        /* 页脚样式 */
+        footer {
+            background: rgba(255, 255, 255, 0.94);
+            padding: 45px 5% 25px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-col {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+            padding-right: 35px;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-title i {
+            margin-right: 10px;
+            color: var(--google-blue);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a i {
+            margin-right: 8px;
+            width: 16px;
+            color: var(--google-blue);
+        }
+
+        .footer-links a:hover {
+            color: var(--google-blue);
+        }
+
+        .footer-info p {
+            margin-bottom: 10px;
+            color: var(--dark-gray);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-info i {
+            margin-right: 12px;
+            width: 20px;
+            color: var(--google-blue);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            margin-top: 25px;
+            font-size: 0.88rem;
+            color: var(--dark-gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(66, 133, 244, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--google-blue);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background-color: var(--google-blue);
+            color: white;
+        }
+
+        .footer-logo {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-about {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--dark-gray);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1000px) {
+            .articles-section {
+                padding-right: 0;
+            }
+
+            .nav-container {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav li {
+                margin: 5px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-col {
+                flex: 100%;
+                padding-right: 0;
+            }
+
+            .bg-controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <span>T</span><span class="red">e</span><span class="yellow">c</span><span class="green">h</span><span>Inspire</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> 首页</a></li>
+                    <li><a href="#"><i class="fas fa-code"></i> 技术</a></li>
+                    <li><a href="#"><i class="fas fa-pencil-ruler"></i> 设计</a></li>
+                    <li><a href="#"><i class="fas fa-folder-open"></i> 资源</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> 关于我们</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- 文章展示区 -->
+        <section class="articles-section">
+            <h2 class="section-title"><i class="fas fa-newspaper"></i> 精选技术文章</h2>
+
+            <!-- 风格一：带图片的卡片 -->
+            <div class="card article-card with-image">
+                <div class="article-image">
+                    <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3" alt="响应式设计实践">
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <div class="article-author">
+                            <div class="author-avatar">L</div>
+                            <span>李明 · 2023年10月15日 · 8分钟阅读</span>
+                        </div>
+                    </div>
+                    <h2>响应式设计的现代实践：超越基础媒体查询</h2>
+                    <p class="article-excerpt">在移动优先设计成为标准的今天，响应式网页设计已经超越了简单的媒体查询。本文将探讨CSS Grid、Flexbox和Container Queries等现代技术如何彻底改变我们创建灵活用户体验的方式...</p>
+                    <div class="article-tags">
+                        <span class="tag tag-web">前端开发</span>
+                        <span class="tag tag-dev">响应式设计</span>
+                        <span class="tag tag-design">CSS</span>
+                    </div>
+                    <a href="#" class="read-more">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- 风格二：无图片卡片 -->
+            <div class="card article-card without-image">
+                <div class="article-meta">
+                    <div class="article-author">
+                        <div class="author-avatar">Z</div>
+                        <span>张伟 · 2023年10月10日 · 6分钟阅读</span>
+                    </div>
+                </div>
+                <h2>探索Web开发中的AI应用</h2>
+                <p class="article-excerpt">人工智能正在以前所未有的方式改变Web开发格局。从自动生成代码到优化用户体验，本文将探讨如何利用OpenAI API和TensorFlow.js在你的Web项目中实现AI功能...</p>
+                <div class="article-tags">
+                    <span class="tag tag-ai">人工智能</span>
+                    <span class="tag tag-dev">Web开发</span>
+                    <span class="tag tag-web">JavaScript</span>
+                </div>
+                <a href="#" class="read-more">阅读全文 <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- 带图片的卡片 -->
+            <div class="card article-card with-image">
+                <div class="article-image">
+                    <img src="https://images.unsplash.com/photo-1537495329792-41ae41ad3bf0?ixlib=rb-4.0.3" alt="React新特性">
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <div class="article-author">
+                            <div class="author-avatar">W</div>
+                            <span>王芳 · 2023年10月8日 · 10分钟阅读</span>
+                        </div>
+                    </div>
+                    <h2>React 18新特性深度解析与实战应用</h2>
+                    <p class="article-excerpt">React 18引入了并发模式、自动批处理、服务器组件等新特性，从根本上改变了React应用的构建方式。本文将深入解析这些新特性并演示如何在真实项目中应用它们...</p>
+                    <div class="article-tags">
+                        <span class="tag tag-web">Web前端</span>
+                        <span class="tag tag-dev">React</span>
+                        <span class="tag tag-design">JavaScript</span>
+                    </div>
+                    <a href="#" class="read-more">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- 无图片卡片 -->
+            <div class="card article-card without-image">
+                <div class="article-meta">
+                    <div class="article-author">
+                        <div class="author-avatar">C</div>
+                        <span>陈明 · 2023年10月5日 · 12分钟阅读</span>
+                    </div>
+                </div>
+                <h2>Python数据分析实战：Pandas高效数据处理技巧</h2>
+                <p class="article-excerpt">Pandas是Python数据科学生态系统的核心组件。本文将分享一些在大型数据处理中提高效率的技巧，包括向量化操作、批量处理优化、内存管理以及如何避免常见陷阱...</p>
+                <div class="article-tags">
+                    <span class="tag tag-dev">Python</span>
+                    <span class="tag tag-dev">数据分析</span>
+                    <span class="tag tag-ai">数据处理</span>
+                </div>
+                <a href="#" class="read-more">阅读全文 <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <!-- 带图片的卡片 -->
+            <div class="card article-card with-image">
+                <div class="article-image">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3" alt="云原生架构">
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <div class="article-author">
+                            <div class="author-avatar">Z</div>
+                            <span>赵华 · 2023年10月1日 · 15分钟阅读</span>
+                        </div>
+                    </div>
+                    <h2>云原生架构设计：构建弹性可扩展的应用</h2>
+                    <p class="article-excerpt">云原生应用充分利用了云计算模型的优势，提供了高弹性、高可用性和快速迭代能力。本文将探讨云原生架构的核心原则和最佳实践，包括容器化、服务网格...</p>
+                    <div class="article-tags">
+                        <span class="tag tag-web">云计算</span>
+                        <span class="tag tag-dev">架构设计</span>
+                        <span class="tag tag-design">云原生</span>
+                    </div>
+                    <a href="#" class="read-more">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <!-- 作者信息卡片 -->
+            <div class="card profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">A</div>
+                    <div class="profile-info">
+                        <h3 class="profile-name">Alex Chen</h3>
+                        <p class="profile-title">全栈开发工程师 & 技术博客主</p>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <div class="stat-number">187</div>
+                        <div class="stat-label">文章</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3.2K</div>
+                        <div class="stat-label">粉丝</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">58</div>
+                        <div class="stat-label">点赞</div>
+                    </div>
+                </div>
+                <div class="profile-bio">
+                    专注于Web技术、云原生和人工智能领域。热爱分享技术实践心得，喜欢开源项目。坚信技术改变世界。
+                </div>
+            </div>
+
+            <!-- 分类目录卡片 -->
+            <div class="card categories-card">
+                <h3 class="categories-title"><i class="fas fa-folder-open"></i> 分类目录</h3>
+                <div class="category">
+                    <span class="category-name">Web前端</span>
+                    <span class="category-count">42</span>
+                </div>
+                <div class="category">
+                    <span class="category-name">后端开发</span>
+                    <span class="category-count">35</span>
+                </div>
+                <div class="category">
+                    <span class="category-name">人工智能</span>
+                    <span class="category-count">28</span>
+                </div>
+                <div class="category">
+                    <span class="category-name">数据科学</span>
+                    <span class="category-count">21</span>
+                </div>
+                <div class="category">
+                    <span class="category-name">云计算</span>
+                    <span class="category-count">19</span>
+                </div>
+                <div class="category">
+                    <span class="category-name">UI/UX设计</span>
+                    <span class="category-count">16</span>
+                </div>
+            </div>
+
+            <!-- 订阅更新卡片 -->
+            <div class="card subscribe-card">
+                <h3 class="subscribe-title"><i class="fas fa-envelope"></i> 订阅更新</h3>
+                <p>第一时间获取博客最新内容和技术分享。我们承诺仅发送高质量内容，不会打扰您的正常生活。</p>
+                <form class="subscribe-form">
+                    <input type="email" placeholder="输入您的邮箱地址" required>
+                    <button type="submit">订阅</button>
+                </form>
+            </div>
+        </aside>
+    </main>
+
+    <!-- 背景切换控件 -->
+    <div class="bg-controls">
+        <div class="bg-btn bg-default active" onclick="changeBackground('default')"></div>
+        <div class="bg-btn bg-1" onclick="changeBackground('custom-bg1')"></div>
+        <div class="bg-btn bg-2" onclick="changeBackground('custom-bg2')"></div>
+        <div class="bg-btn bg-3" onclick="changeBackground('custom-bg3')"></div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <div class="footer-logo">TechInspire</div>
+                <p class="footer-about">
+                    我们致力于分享前沿的技术实践和设计理念，帮助开发者、设计师和技术爱好者持续成长。
+                    我们的使命是激发创新思维，推动技术发展，连接技术爱好者社区。
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fab fa-weibo"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-zhihu"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-weixin"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-title"><i class="fas fa-link"></i> 快速链接</h4>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 首页</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 技术专区</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 设计资源</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 项目案例</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 开源项目</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-title"><i class="fas fa-question-circle"></i> 帮助中心</h4>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 常见问题</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 内容贡献</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 版权声明</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 社区准则</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> 广告合作</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-title"><i class="fas fa-envelope"></i> 联系我们</h4>
+                <div class="footer-info">
+                    <p><i class="fas fa-envelope"></i> contact@techinspire.com</p>
+                    <p><i class="fab fa-weixin"></i> TechInspire_Official</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 北京市海淀区中关村科技园</p>
+                    <p><i class="fab fa-qq"></i> 技术交流群: 12345678</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="copyright">
+            © 2023 TechInspire 技术博客. 保留所有权利. 京ICP备12345678号
+        </div>
+    </footer>
+
+    <script>
+        // 背景切换函数
+        function changeBackground(bgClass) {
+            document.body.className = bgClass;
+
+            // 更新激活状态的按钮
+            const btns = document.querySelectorAll('.bg-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有带图片的卡片添加动画延迟效果
+            const articleCards = document.querySelectorAll('.article-card.with-image');
+            articleCards.forEach((card, index) => {
+                card.style.transitionDelay = `${index * 0.05}s`;
+            });
+
+            // 模拟实际加载图片
+            const images = document.querySelectorAll('.article-image img');
+            images.forEach(img => {
+                // 在实际应用中，这里应该使用真实的图片地址
+                // 此处仅用于演示目的
+                setTimeout(() => {
+                    img.style.opacity = '1';
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

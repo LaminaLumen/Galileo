@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>deargalileo - 探索科技与设计</title>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --accent-color: #ea4335;
+            --text-color: #202124;
+            --light-text: #5f6368;
+            --background-color: #fff;
+            --card-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', 'Arial', sans-serif;
+            color: var(--text-color);
+            background-color: #f8f9fa;
+            background-image: url('static/wallpaper.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 标题条样式 */
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            max-width: 600px;
+            margin: 0 30px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 24px;
+            border: 1px solid #dfe1e5;
+            font-size: 16px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            background-color: rgba(66, 133, 244, 0.1);
+        }
+
+        /* 功能区样式 */
+        .main-content {
+            display: flex;
+            margin: 40px 0;
+            gap: 30px;
+        }
+
+        .articles-container {
+            flex: 0 0 calc(100% * 5/7);
+        }
+
+        .sidebar {
+            flex: 0 0 calc(100% * 2/7);
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .article-card .article-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .article-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .meta-item i {
+            margin-right: 5px;
+        }
+
+        .read-time {
+            background-color: rgba(66, 133, 244, 0.1);
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .article-preview {
+            color: var(--light-text);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background-color: #e8eaed;
+            color: var(--text-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            background-color: #d2e3fc;
+            color: var(--primary-color);
+        }
+
+        .read-more {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .read-more:hover {
+            background-color: #3367d6;
+        }
+
+        /* 作者信息卡片样式 */
+        .author-info {
+            text-align: center;
+        }
+
+        .author-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid var(--primary-color);
+        }
+
+        .author-name {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .author-bio {
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f1f3f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-icon:hover {
+            background-color: #e8f0fe;
+        }
+
+        /* 分类目录卡片样式 */
+        .categories-list {
+            list-style: none;
+        }
+
+        .category-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e8eaed;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .category-count {
+            background-color: #f1f3f4;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.8rem;
+        }
+
+        /* 标签云样式 */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-cloud .tag {
+            margin: 0;
+        }
+
+        /* 订阅卡片样式 */
+        .subscribe input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dfe1e5;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .subscribe button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .subscribe button:hover {
+            background-color: #2d8c47;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 50px 0 20px;
+            border-top: 1px solid #e8eaed;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo .logo-icon {
+            background-color: var(--text-color);
+        }
+
+        .footer-about {
+            max-width: 300px;
+            color: var(--light-text);
+            line-height: 1.8;
+        }
+
+        .footer-links h3 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--light-text);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .contact-info i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e8eaed;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* 背景切换按钮 */
+        .bg-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .bg-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .bg-btn.active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.5);
+        }
+
+        .bg-btn:nth-child(1) { background-image: url('static/wallpaper.png'); }
+        .bg-btn:nth-child(2) { background-image: url('static/wallpaper1.png'); }
+        .bg-btn:nth-child(3) { background-image: url('static/wallpaper2.png'); }
+    </style>
+</head>
+<body>
+    <!-- 背景切换按钮 -->
+    <div class="bg-switcher">
+        <div class="bg-btn active" data-bg="static/wallpaper.png"></div>
+        <div class="bg-btn" data-bg="static/wallpaper1.png"></div>
+        <div class="bg-btn" data-bg="static/wallpaper2.png"></div>
+    </div>
+
+    <!-- 标题条 -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">DG</div>
+                <div class="logo-text">deargalileo</div>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="搜索博客内容...">
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#">首页</a></li>
+                <li><a href="#">技术</a></li>
+                <li><a href="#">设计</a></li>
+                <li><a href="#">资源</a></li>
+                <li><a href="#">关于我们</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 功能区 -->
+    <main class="container">
+        <div class="main-content">
+            <!-- 文章卡片区域 (5/7宽度) -->
+            <div class="articles-container">
+                <!-- 文章卡片 1 -->
+                <article class="card article-card">
+                    <img src="https://via.placeholder.com/800x400" alt="文章图片" class="article-image">
+                    <div class="article-meta">
+                        <span class="meta-item"><i>👤</i> 伽利略</span>
+                        <span class="meta-item"><i>📅</i> 2025-07-01</span>
+                        <span class="read-time">⏱️ 8分钟阅读</span>
+                    </div>
+                    <h2 class="article-title">探索CSS Grid布局的无限可能性</h2>
+                    <p class="article-preview">
+                        在现代网页设计中，CSS Grid布局已经彻底改变了我们创建响应式布局的方式。本文将深入探讨Grid布局的核心概念和实际应用场景，帮助您创建更加灵活和强大的网页布局...
+                    </p>
+                    <div class="article-tags">
+                        <span class="tag">CSS</span>
+                        <span class="tag">网页设计</span>
+                        <span class="tag">前端开发</span>
+                        <span class="tag">响应式设计</span>
+                    </div>
+                    <a href="#" class="read-more">阅读全文</a>
+                </article>
+
+                <!-- 文章卡片 2 -->
+                <article class="card article-card">
+                    <div class="article-meta">
+                        <span class="meta-item"><i>👤</i> 爱因斯坦</span>
+                        <span class="meta-item"><i>📅</i> 2025-06-25</span>
+                        <span class="read-time">⏱️ 12分钟阅读</span>
+                    </div>
+                    <h2 class="article-title">JavaScript异步编程的演进：从回调到Async/Await</h2>
+                    <p class="article-preview">
+                        JavaScript的异步编程模型经历了多次重大变革。了解这些演变过程不仅有助于我们编写更好的代码，还能避免常见的陷阱。本文将带您穿越JavaScript异步编程的历史...
+                    </p>
+                    <div class="article-tags">
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">编程</span>
+                        <span class="tag">异步</span>
+                    </div>
+                    <a href="#" class="read-more">阅读全文</a>
+                </article>
+
+                <!-- 文章卡片 3 -->
+                <article class="card article-card">
+                    <img src="https://via.placeholder.com/800x400" alt="文章图片" class="article-image">
+                    <div class="article-meta">
+                        <span class="meta-item"><i>👤</i> 牛顿</span>
+                        <span class="meta-item"><i>📅</i> 2025-06-18</span>
+                        <span class="read-time">⏱️ 6分钟阅读</span>
+                    </div>
+                    <h2 class="article-title">用户体验设计中的微交互：提升用户参与度的秘密武器</h2>
+                    <p class="article-preview">
+                        微交互是那些看似微不足道却对整体用户体验产生深远影响的细节设计。本文将探讨如何通过精心设计的微交互提升用户参与度和满意度...
+                    </p>
+                    <div class="article-tags">
+                        <span class="tag">UI/UX</span>
+                        <span class="tag">设计</span>
+                        <span class="tag">用户体验</span>
+                    </div>
+                    <a href="#" class="read-more">阅读全文</a>
+                </article>
+
+                <!-- 文章卡片 4 -->
+                <article class="card article-card">
+                    <div class="article-meta">
+                        <span class="meta-item"><i>👤</i> 霍金</span>
+                        <span class="meta-item"><i>📅</i> 2025-06-10</span>
+                        <span class="read-time">⏱️ 15分钟阅读</span>
+                    </div>
+                    <h2 class="article-title">深入理解React Hooks：构建更简洁的组件架构</h2>
+                    <p class="article-preview">
+                        React Hooks彻底改变了我们构建React组件的方式。本文将深入探讨useState、useEffect等核心Hook的工作原理以及如何创建自定义Hook来解决复杂问题...
+                    </p>
+                    <div class="article-tags">
+                        <span class="tag">React</span>
+                        <span class="tag">前端框架</span>
+                        <span class="tag">JavaScript</span>
+                    </div>
+                    <a href="#" class="read-more">阅读全文</a>
+                </article>
+
+                <!-- 文章卡片 5 -->
+                <article class="card article-card">
+                    <img src="https://via.placeholder.com/800x400" alt="文章图片" class="article-image">
+                    <div class="article-meta">
+                        <span class="meta-item"><i>👤</i> 居里</span>
+                        <span class="meta-item"><i>📅</i> 2025-06-05</span>
+                        <span class="read-time">⏱️ 10分钟阅读</span>
+                    </div>
+                    <h2 class="article-title">网站性能优化：从加载时间到交互流畅度</h2>
+                    <p class="article-preview">
+                        网站性能是影响用户体验和SEO排名的关键因素。本文将分享一系列实用的性能优化技术，涵盖资源加载、渲染优化和运行时性能等方面...
+                    </p>
+                    <div class="article-tags">
+                        <span class="tag">性能优化</span>
+                        <span class="tag">Web开发</span>
+                        <span class="tag">用户体验</span>
+                    </div>
+                    <a href="#" class="read-more">阅读全文</a>
+                </article>
+            </div>
+
+            <!-- 侧边栏 (2/7宽度) -->
+            <div class="sidebar">
+                <!-- 作者信息卡片 -->
+                <div class="card author-info">
+                    <img src="https://via.placeholder.com/100" alt="作者头像" class="author-avatar">
+                    <h3 class="author-name">Dear Galileo</h3>
+                    <p class="author-bio">
+                        科技与设计爱好者，前端开发工程师。热爱探索新技术，分享知识经验。
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">🐦</a>
+                        <a href="#" class="social-icon">📱</a>
+                        <a href="#" class="social-icon">📧</a>
+                        <a href="#" class="social-icon">💼</a>
+                    </div>
+                </div>
+
+                <!-- 分类目录卡片 -->
+                <div class="card">
+                    <h3>分类目录</h3>
+                    <ul class="categories-list">
+                        <li class="category-item">
+                            <span>前端开发</span>
+                            <span class="category-count">24</span>
+                        </li>
+                        <li class="category-item">
+                            <span>UI/UX设计</span>
+                            <span class="category-count">18</span>
+                        </li>
+                        <li class="category-item">
+                            <span>JavaScript</span>
+                            <span class="category-count">32</span>
+                        </li>
+                        <li class="category-item">
+                            <span>性能优化</span>
+                            <span class="category-count">12</span>
+                        </li>
+                        <li class="category-item">
+                            <span>响应式设计</span>
+                            <span class="category-count">15</span>
+                        </li>
+                        <li class="category-item">
+                            <span>Web安全</span>
+                            <span class="category-count">9</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 标签信息卡 -->
+                <div class="card">
+                    <h3>热门标签</h3>
+                    <div class="tag-cloud">
+                        <span class="tag">CSS</span>
+                        <span class="tag">React</span>
+                        <span class="tag">Vue</span>
+                        <span class="tag">动画</span>
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">移动端</span>
+                        <span class="tag">SEO</span>
+                        <span class="tag">Webpack</span>
+                        <span class="tag">设计系统</span>
+                        <span class="tag">无障碍</span>
+                        <span class="tag">性能</span>
+                    </div>
+                </div>
+
+                <!-- 订阅更新卡片 -->
+                <div class="card subscribe">
+                    <h3>订阅更新</h3>
+                    <p>获取最新文章和技术资讯</p>
+                    <input type="email" placeholder="输入您的邮箱">
+                    <button>订阅</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 网页底部 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <div class="logo-icon">DG</div>
+                        <div class="logo-text">deargalileo</div>
+                    </div>
+                    <p class="footer-about">
+                        dearGalileo是一个专注于技术与设计的博客平台，致力于分享前沿的Web开发技术和设计理念，帮助开发者提升技能，创造更好的数字体验。
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="#">首页</a></li>
+                        <li><a href="#">技术文章</a></li>
+                        <li><a href="#">设计资源</a></li>
+                        <li><a href="#">项目案例</a></li>
+                        <li><a href="#">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links footer-contact">
+                    <h3>联系我们</h3>
+                    <div class="contact-info">
+                        <i>📧</i> <span>contact@deargalileo.com</span>
+                    </div>
+                    <div class="contact-info">
+                        <i>🌐</i> <span>www.deargalileo.com</span>
+                    </div>
+                    <div class="contact-info">
+                        <i>🏢</i> <span>上海市科技园区88号</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copyright">
+                &copy; 2025 dearGalileo 博客平台 | 探索科技与设计的无限可能
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 背景切换功能
+        document.querySelectorAll('.bg-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                document.querySelectorAll('.bg-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                // 给当前点击的按钮添加active类
+                this.classList.add('active');
+
+                // 更改页面背景
+                const bgImage = this.getAttribute('data-bg');
+                document.body.style.backgroundImage = `url('${bgImage}')`;
+            });
+        });
+    </script>
+</body>
+</html>
