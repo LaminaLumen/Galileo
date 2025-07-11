@@ -1,40 +1,40 @@
+# ⬇️⬇️⬇️ 关键修改点 ⬇️⬇️⬇️
 # 使用官方 Python 基础镜像
 FROM python:3.10-slim
 
-# 安装Nginx
+# 安装依赖
 RUN apt-get update && \
-    apt-get install -y nginx && \
+    apt-get install -y --no-install-recommends nginx-light && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # 设置工作目录
 WORKDIR /flaskapp
 
+# 先复制启动脚本 👇 确保在根目录！
+COPY ./start.sh /start.sh
+RUN chmod +x /start.sh
+
+# 复制证书文件
+COPY ./nginx/certs/galileoblog.pem /etc/nginx/ssl/
+COPY ./nginx/certs/galileoblog.key /etc/nginx/ssl/
+RUN chmod 400 /etc/nginx/ssl/galileoblog.key
+
 # 复制依赖文件并安装
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 复制项目文件
-COPY . .
+# 复制项目文件（注意排除证书目录）
+COPY . /flaskapp
 
-# ======== Nginx配置 ========
-# 1. 删除默认配置
-RUN rm /etc/nginx/sites-enabled/default
+# 以下保持原有配置...
+RUN mkdir -p /var/www/certbot /etc/nginx/ssl
+COPY nginx/flaskapp.conf /etc/nginx/conf.d/default.conf
+RUN ln -sf /dev/stderr /var/log/nginx/error.log && \
+    sed -i '/pid /d' /etc/nginx/nginx.conf
 
-# 2. 复制自定义配置
-COPY config/nginx_flaskapp.conf /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/nginx_flaskapp.conf /etc/nginx/sites-enabled/
+# 暴露端口
+EXPOSE 80 443
 
-# 3. 日志重定向
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
-
-# ======== 启动设置 ========
-# 复制启动脚本
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-# 暴露Nginx端口（根据DNS图片，Cloudflare需连接此端口）
-EXPOSE 80
-
-# 使用启动脚本
+# 启动容器
 CMD ["/start.sh"]
