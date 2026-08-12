@@ -35,7 +35,7 @@ git tag -s v0.1.0 -m "Galileo v0.1.0"
 
 只有在明确准备发布并确认远端分支时才推送提交和标签。标签优先使用签名标签；若签名环境尚未建立，使用 annotated tag 并在发布说明中如实标注。
 
-推送标签会触发 `Publish container images` 工作流。工作流会核对 tag 与 `pyproject.toml` 版本，并为应用和 Nginx 发布 `linux/amd64`、`linux/arm64` 镜像、SBOM 与构建来源证明。
+推送标签会触发 `Publish container images` 工作流。工作流会核对 tag 与 `pyproject.toml` 版本，并为应用和 Nginx 发布 `linux/amd64`、`linux/arm64` 镜像、SBOM 与构建来源证明；发布后会退出 GHCR 登录并匿名核验两个架构。若首次创建的包不是 Public，由仓库所有者在 GitHub Packages 设置中公开一次，不在仓库令牌工作流中修改用户级包可见性。
 
 ## 3. GitHub Release
 
