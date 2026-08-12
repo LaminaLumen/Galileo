@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}关于 · {{ site.name }}{% endblock %}
+{% block description %}了解 Galileo 为什么坚持文件优先、自托管和开放协议。{% endblock %}
+
+{% block content %}
+<section class="about-hero shell reveal">
+    <div class="section-index">ABOUT / PROJECT ORBIT</div>
+    <h1>为个人表达保留一条<br><em>不依赖平台的轨道。</em></h1>
+    <p>Galileo 是一个中文优先的自托管发布起步项目。它把内容保存在普通 Markdown 文件里，保留 RSS、站点地图和语义化 HTML，让站点可以被阅读、订阅、归档和迁移。</p>
+</section>
+
+<section class="manifesto shell">
+    <div class="manifesto-card reveal"><span>01</span><h2>文件优先</h2><p>文章不是锁在数据库里的记录，而是随时可以复制、版本化和迁移的文本文件。</p></div>
+    <div class="manifesto-card reveal"><span>02</span><h2>隐私默认</h2><p>默认不加载第三方字体、分析脚本或追踪像素。是否引入外部服务，由站点所有者明确决定。</p></div>
+    <div class="manifesto-card reveal"><span>03</span><h2>开放协议</h2><p>RSS、sitemap、robots.txt 和清晰 URL 都是功能，不是发布完成后才补的装饰。</p></div>
+    <div class="manifesto-card reveal"><span>04</span><h2>容易维护</h2><p>Flask、标准模板与容器部署保持小而透明，让个人维护者能看懂、测试和升级整个栈。</p></div>
+</section>
+
+<section class="stack-map shell reveal">
+    <div>
+        <div class="section-index">STACK / READABLE BY DESIGN</div>
+        <h2>从一篇 Markdown<br>到一个公开 URL</h2>
+    </div>
+    <ol>
+        <li><span>01</span><strong>WRITE</strong><p>在 content/posts 中创建 Markdown。</p></li>
+        <li><span>02</span><strong>RENDER</strong><p>Flask 安全渲染正文与元数据。</p></li>
+        <li><span>03</span><strong>SERVE</strong><p>Gunicorn 和 Nginx 提供稳定响应。</p></li>
+        <li><span>04</span><strong>SYNDICATE</strong><p>RSS 与站点地图同步对外广播。</p></li>
+    </ol>
+</section>
+
+<section class="about-cta shell reveal">
+    <h2>把它变成你的站点。</h2>
+    <p>Galileo 仍处于早期阶段。最有价值的贡献，是一个真实使用场景、一份可复现报告，或一次把复杂度继续压低的改进。</p>
+    <a class="button button-primary" href="{{ site.github_url }}">阅读源码与贡献指南 ↗</a>
+</section>
+{% endblock %}

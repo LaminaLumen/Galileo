@@ -1,40 +1,47 @@
-# ⬇️⬇️⬇️ 关键修改点 ⬇️⬇️⬇️
-# 使用官方 Python 基础镜像
-FROM python:3.10-slim
+FROM python:3.13.9-slim-bookworm@sha256:b685a4fa58bb19d1814d78a1ec0f0208f351452724f78b20212c984d6e124a34 AS builder
 
-# 安装依赖
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends nginx-light && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_ROOT_USER_ACTION=ignore
 
-# 设置工作目录
-WORKDIR /flaskapp
+WORKDIR /build
 
-# 先复制启动脚本 👇 确保在根目录！
-COPY ./start.sh /start.sh
-RUN chmod +x /start.sh
+COPY pyproject.toml README.md LICENSE ./
+COPY galileo ./galileo
 
-# 复制证书文件
-COPY ./nginx/certs/galileoblog.pem /etc/nginx/ssl/
-COPY ./nginx/certs/galileoblog.key /etc/nginx/ssl/
-RUN chmod 400 /etc/nginx/ssl/galileoblog.key
+RUN python -m pip wheel --wheel-dir /wheels .
 
-# 复制依赖文件并安装
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# 复制项目文件（注意排除证书目录）
-COPY . /flaskapp
+FROM python:3.13.9-slim-bookworm@sha256:b685a4fa58bb19d1814d78a1ec0f0208f351452724f78b20212c984d6e124a34 AS runtime
 
-# 以下保持原有配置...
-RUN mkdir -p /var/www/certbot /etc/nginx/ssl
-COPY nginx/flaskapp.conf /etc/nginx/conf.d/default.conf
-RUN ln -sf /dev/stderr /var/log/nginx/error.log && \
-    sed -i '/pid /d' /etc/nginx/nginx.conf
+ARG APP_UID=10001
+ARG APP_GID=10001
 
-# 暴露端口
-EXPOSE 80 443
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    GALILEO_ROOT=/app \
+    PIP_ROOT_USER_ACTION=ignore \
+    TZ=Asia/Shanghai
 
-# 启动容器
-CMD ["/start.sh"]
+RUN groupadd --gid "${APP_GID}" galileo \
+    && useradd --uid "${APP_UID}" --gid galileo --no-create-home --shell /usr/sbin/nologin galileo
+
+WORKDIR /app
+
+COPY --from=builder /wheels /wheels
+RUN python -m pip install --no-cache-dir /wheels/* \
+    && rm -rf /wheels
+
+COPY --chown=galileo:galileo app.py ./
+COPY --chown=galileo:galileo content ./content
+COPY --chown=galileo:galileo static ./static
+COPY --chown=galileo:galileo templates ./templates
+
+USER galileo
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3)"]
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "4", "--timeout", "30", "--worker-tmp-dir", "/tmp", "--no-control-socket", "--access-logfile", "-", "--error-logfile", "-", "app:app"]

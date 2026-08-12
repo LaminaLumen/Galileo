@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+.tmp-wheel/
+.playwright-cli/
+
+# 虚拟环境与本地配置
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# 证书、私钥和本地运行产物
+nginx/certs/
+*.crt
+*.key
+*.p12
+*.pfx
+*.pem
+logs/

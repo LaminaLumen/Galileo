@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 私密安全报告
+    url: https://github.com/LaminaLumen/Galileo/security/advisories/new
+    about: 请不要公开披露漏洞细节、凭据或个人数据。
+  - name: 使用文档
+    url: https://github.com/LaminaLumen/Galileo#readme
+    about: 提交问题前请先核对快速开始、配置和部署文档。

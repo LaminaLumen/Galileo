@@ -1,694 +1,131 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>谷歌风格个人博客</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --google-blue: #4285F4;
-            --google-red: #EA4335;
-            --google-yellow: #FBBC04;
-            --google-green: #34A853;
-            --google-gray-50: #F8F9FA;
-            --google-gray-100: #F1F3F4;
-            --google-gray-200: #E8EAED;
-            --google-gray-700: #5F6368;
-            --google-gray-900: #202124;
-            --card-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        body {
-            font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-            background-color: var(--google-gray-50);
-            color: var(--google-gray-900);
-            line-height: 1.6;
-            background-image: url('./static/wallpaper.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-blend-mode: lighten;
-            background-color: rgba(248, 249, 250, 0.9);
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.85);
-            z-index: -1;
-        }
-
-        .header-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* 顶部导航 */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 22px;
-            font-weight: 500;
-            color: var(--google-gray-900);
-            text-decoration: none;
-        }
-
-        .logo span {
-            margin-left: 8px;
-        }
-
-        .google-colors span:nth-child(1) { color: var(--google-blue); }
-        .google-colors span:nth-child(2) { color: var(--google-red); }
-        .google-colors span:nth-child(3) { color: var(--google-yellow); }
-        .google-colors span:nth-child(4) { color: var(--google-green); }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 30px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--google-gray-700);
-            font-weight: 500;
-            font-size: 14px;
-            padding: 8px 0;
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--google-blue);
-        }
-
-        .nav-links a.active {
-            color: var(--google-blue);
-        }
-
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--google-blue);
-            border-radius: 3px 3px 0 0;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--google-gray-700);
-        }
-
-        /* 主体内容区 */
-        main {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        @media (min-width: 768px) {
-            main {
-                grid-template-columns: 7fr 3fr;
-            }
-        }
-
-        /* 文章卡片 */
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            transition: var(--transition);
-            margin-bottom: 24px;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .featured-card {
-            display: grid;
-            grid-template-columns: 1fr;
-        }
-
-        @media (min-width: 768px) {
-            .featured-card {
-                grid-template-columns: 3fr 2fr;
-            }
-        }
-
-        .card-content {
-            padding: 20px;
-        }
-
-        .featured-image {
-            background-size: cover;
-            background-position: center;
-            min-height: 200px;
-        }
-
-        .article-meta {
-            display: flex;
-            align-items: center;
-            color: var(--google-gray-700);
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            margin-right: 10px;
-            object-fit: cover;
-        }
-
-        .article-title {
-            font-family: 'Noto Serif', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--google-gray-900);
-            line-height: 1.3;
-        }
-
-        .article-excerpt {
-            color: var(--google-gray-700);
-            margin-bottom: 15px;
-        }
-
-        .read-more {
-            display: inline-flex;
-            align-items: center;
-            color: var(--google-blue);
-            font-weight: 500;
-            text-decoration: none;
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .read-more:hover {
-            color: var(--google-red);
-        }
-
-        .read-more span {
-            margin-left: 5px;
-            font-size: 18px;
-        }
-
-        .tag {
-            display: inline-block;
-            background-color: var(--google-gray-100);
-            color: var(--google-gray-700);
-            border-radius: 16px;
-            padding: 4px 12px;
-            font-size: 12px;
-            margin: 10px 5px 0 0;
-            transition: var(--transition);
-        }
-
-        .tag:hover {
-            background-color: var(--google-gray-200);
-        }
-
-        /* 侧边栏 */
-        .sidebar-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-
-        .sidebar-title {
-            font-size: 18px;
-            font-weight: 500;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--google-gray-100);
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar-title span {
-            margin-right: 8px;
-            color: var(--google-gray-700);
-        }
-
-        .author-info {
-            text-align: center;
-            padding: 15px 0;
-        }
-
-        .author-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 15px;
-            border: 3px solid var(--google-gray-100);
-        }
-
-        .category-list {
-            list-style: none;
-        }
-
-        .category-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid var(--google-gray-100);
-        }
-
-        .category-list li:last-child {
-            border-bottom: none;
-        }
-
-        .category-list a {
-            text-decoration: none;
-            color: var(--google-gray-700);
-            display: flex;
-            align-items: center;
-            transition: var(--transition);
-        }
-
-        .category-list a:hover {
-            color: var(--google-blue);
-        }
-
-        .category-list span {
-            margin-right: 8px;
-        }
-
-        .subscription {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .subscribe-input {
-            padding: 10px 15px;
-            border: 1px solid var(--google-gray-200);
-            border-radius: 4px;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .subscribe-btn {
-            background-color: var(--google-blue);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .subscribe-btn:hover {
-            background-color: #3367D6;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--google-gray-100);
-            margin: 0 5px;
-            color: var(--google-gray-700);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .social-link:hover {
-            background-color: var(--google-gray-200);
-            color: var(--google-blue);
-        }
-
-        /* 页脚 */
-        footer {
-            background-color: white;
-            color: var(--google-gray-700);
-            padding: 40px 20px;
-            margin-top: 50px;
-            border-top: 1px solid var(--google-gray-100);
-        }
-
-        .footer-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        @media (min-width: 768px) {
-            .footer-container {
-                grid-template-columns: 2fr 1fr 1fr;
-            }
-        }
-
-        .footer-about p {
-            margin: 15px 0;
-            font-size: 14px;
-        }
-
-        .footer-section h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: var(--google-gray-900);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            text-decoration: none;
-            color: var(--google-gray-700);
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--google-blue);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            margin-top: 30px;
-            border-top: 1px solid var(--google-gray-100);
-            font-size: 14px;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 767px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background-color: white;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-links li {
-                margin: 0 0 15px 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .featured-card {
-                grid-template-columns: 1fr;
-            }
-
-            .featured-image {
-                min-height: 150px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="overlay"></div>
-    <header>
-        <div class="header-container">
-            <div class="nav-container">
-                <a href="#" class="logo">
-                    <div class="google-colors">
-                        <span>G</span><span>o</span><span>o</span><span>g</span>
-                    </div>
-                    <span>Blogger</span>
-                </a>
-
-                <button class="mobile-menu-btn" id="mobileMenu">
-                    <span class="material-symbols-outlined">menu</span>
-                </button>
-
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="#" class="active">首页</a></li>
-                    <li><a href="#">技术</a></li>
-                    <li><a href="#">设计</a></li>
-                    <li><a href="#">生活</a></li>
-                    <li><a href="#">旅行</a></li>
-                    <li><a href="#">关于我</a></li>
-                </ul>
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero shell">
+    <div class="hero-copy reveal">
+        <div class="eyebrow"><span></span> SELF-HOSTED / FILE-FIRST / ZH-CN</div>
+        <h1>把自己的坐标，<em>写回开放网络。</em></h1>
+        <p class="hero-lede">{{ site.description }} 不接数据库，不偷偷加统计，用 Markdown 写作，用标准 Web 协议抵达读者。</p>
+        <div class="hero-actions">
+            <a class="button button-primary" href="#latest">浏览文章 <span aria-hidden="true">↓</span></a>
+            <a class="button button-quiet" href="{{ site.github_url }}">查看源码 <span aria-hidden="true">↗</span></a>
+        </div>
+    </div>
+
+    <div class="observatory reveal" aria-label="Galileo 开放网络观测仪示意图">
+        <div class="observatory-index">N 31° / E 121°</div>
+        <svg viewBox="0 0 560 560" role="img" aria-hidden="true">
+            <circle class="orbit orbit-outer" cx="280" cy="280" r="230"></circle>
+            <circle class="orbit orbit-mid" cx="280" cy="280" r="164"></circle>
+            <circle class="orbit orbit-inner" cx="280" cy="280" r="92"></circle>
+            <path class="axis" d="M30 280h500M280 30v500"></path>
+            <path class="trajectory" d="M106 392C156 232 286 148 453 186"></path>
+            <circle class="signal" cx="424" cy="176" r="10"></circle>
+            <circle class="signal-halo" cx="424" cy="176" r="24"></circle>
+            <text x="44" y="270">OPEN WEB</text>
+            <text x="292" y="520">YOUR ORBIT</text>
+        </svg>
+        <div class="observatory-core">
+            <span>G</span>
+            <small>01 / {{ posts|length }}</small>
+        </div>
+        <div class="observatory-note">OWN YOUR<br>CONTENT</div>
+    </div>
+</section>
+
+<section class="principles-strip" aria-label="项目特性">
+    <div class="shell principles-grid">
+        <div><strong>00</strong><span>数据库</span></div>
+        <div><strong>00</strong><span>默认追踪器</span></div>
+        <div><strong>01</strong><span>Docker 命令启动</span></div>
+        <div><strong>100%</strong><span>内容可迁移</span></div>
+    </div>
+</section>
+
+{% if featured and not selected_tag %}
+<section class="featured shell reveal" aria-labelledby="featured-title">
+    <div class="section-index">01 / FEATURED SIGNAL</div>
+    <article class="featured-card">
+        <div class="featured-visual" aria-hidden="true">
+            <div class="featured-number">{{ "%02d"|format(featured.published_at.day) }}</div>
+            <div class="featured-month">{{ featured.published_at.strftime('%m / %Y') }}</div>
+            <div class="featured-lines"></div>
+        </div>
+        <div class="featured-copy">
+            <div class="post-meta">
+                <time datetime="{{ featured.published_iso }}">{{ featured.published_date }}</time>
+                <span>{{ featured.reading_minutes }} 分钟阅读</span>
+            </div>
+            <h2 id="featured-title"><a href="{{ url_for('site.post_detail', slug=featured.slug) }}">{{ featured.title }}</a></h2>
+            <p>{{ featured.summary }}</p>
+            <div class="card-footer">
+                <div class="tag-row">
+                    {% for tag in featured.tags %}<a href="{{ url_for('site.index', tag=tag) }}"># {{ tag }}</a>{% endfor %}
+                </div>
+                <a class="round-link" href="{{ url_for('site.post_detail', slug=featured.slug) }}" aria-label="阅读 {{ featured.title }}">↗</a>
             </div>
         </div>
-    </header>
+    </article>
+</section>
+{% endif %}
 
-    <main>
-        <div class="main-content">
-            <!-- 特色文章 -->
-            <article class="card featured-card">
-                <div class="featured-image" style="background-image: url('https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
-                <div class="card-content">
-                    <div class="article-meta">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="作者" class="avatar">
-                        <span>李明 · 2023年10月15日 · 8分钟阅读</span>
-                    </div>
-                    <h2 class="article-title">响应式设计的现代实践：超越基础媒体查询</h2>
-                    <p class="article-excerpt">在移动优先设计成为标准的今天，响应式网页设计已经超越了简单的媒体查询。本文将探讨CSS Grid、Flexbox和Container Queries等现代技术如何彻底改变我们创建灵活用户体验的方式...</p>
-                    <a href="#" class="read-more">
-                        阅读全文
-                        <span class="material-symbols-outlined">arrow_forward</span>
-                    </a>
-                    <div class="tags">
-                        <a href="#" class="tag">#前端开发</a>
-                        <a href="#" class="tag">#响应式设计</a>
-                        <a href="#" class="tag">#CSS</a>
-                    </div>
-                </div>
-            </article>
+<section class="archive shell" id="latest" aria-labelledby="latest-title">
+    <div class="archive-head reveal">
+        <div>
+            <div class="section-index">02 / FIELD NOTES</div>
+            <h2 id="latest-title">{% if selected_tag %}标签：{{ selected_tag }}{% else %}最近观测记录{% endif %}</h2>
+        </div>
+        {% if selected_tag %}<a class="clear-filter" href="{{ url_for('site.index') }}">清除筛选 ×</a>{% endif %}
+    </div>
 
-            <!-- 常规文章 -->
-            <article class="card">
-                <div class="card-content">
-                    <div class="article-meta">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="作者" class="avatar">
-                        <span>张伟 · 2023年10月10日 · 6分钟阅读</span>
+    <div class="archive-layout">
+        <div class="post-list">
+            {% for post in posts %}
+                {% if not featured or post.slug != featured.slug or selected_tag %}
+                <article class="post-row reveal">
+                    <div class="post-date">
+                        <strong>{{ post.published_at.strftime('%d') }}</strong>
+                        <span>{{ post.published_at.strftime('%m.%Y') }}</span>
                     </div>
-                    <h2 class="article-title">探索Web开发中的AI应用</h2>
-                    <p class="article-excerpt">人工智能正在以前所未有的方式改变Web开发格局。从自动生成代码到优化用户体验，本文将探讨如何利用OpenAI API和TensorFlow.js在你的Web项目中实现AI功能...</p>
-                    <a href="#" class="read-more">
-                        阅读全文
-                        <span class="material-symbols-outlined">arrow_forward</span>
-                    </a>
-                    <div class="tags">
-                        <a href="#" class="tag">#人工智能</a>
-                        <a href="#" class="tag">#Web开发</a>
-                        <a href="#" class="tag">#JavaScript</a>
+                    <div class="post-row-body">
+                        <div class="post-meta"><span>{{ post.reading_minutes }} 分钟阅读</span>{% if post.draft %}<span class="draft-badge">草稿</span>{% endif %}</div>
+                        <h3><a href="{{ url_for('site.post_detail', slug=post.slug) }}">{{ post.title }}</a></h3>
+                        <p>{{ post.summary }}</p>
+                        <div class="tag-row">{% for tag in post.tags %}<a href="{{ url_for('site.index', tag=tag) }}"># {{ tag }}</a>{% endfor %}</div>
                     </div>
-                </div>
-            </article>
-
-            <article class="card">
-                <div class="card-content">
-                    <div class="article-meta">
-                        <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="作者" class="avatar">
-                        <span>王芳 · 2023年10月5日 · 5分钟阅读</span>
-                    </div>
-                    <h2 class="article-title">设计师的色彩心理学指南</h2>
-                    <p class="article-excerpt">颜色不仅影响美观，还影响用户的情感和行为决策。在这篇指南中，我们将深入探讨如何在UI设计中有效地使用色彩心理学，以创建更具吸引力和转化率的界面...</p>
-                    <a href="#" class="read-more">
-                        阅读全文
-                        <span class="material-symbols-outlined">arrow_forward</span>
-                    </a>
-                    <div class="tags">
-                        <a href="#" class="tag">#UI设计</a>
-                        <a href="#" class="tag">#用户体验</a>
-                        <a href="#" class="tag">#心理学</a>
-                    </div>
-                </div>
-            </article>
+                    <a class="post-arrow" href="{{ url_for('site.post_detail', slug=post.slug) }}" aria-label="阅读 {{ post.title }}">→</a>
+                </article>
+                {% endif %}
+            {% else %}
+                <div class="empty-state"><strong>暂时没有匹配的观测记录。</strong><a href="{{ url_for('site.index') }}">返回全部文章</a></div>
+            {% endfor %}
         </div>
 
-        <div class="sidebar">
-            <!-- 作者介绍 -->
-            <div class="sidebar-card">
-                <h3 class="sidebar-title">
-                    <span class="material-symbols-outlined">person</span>
-                    关于作者
-                </h3>
-                <div class="author-info">
-                    <img src="https://images.unsplash.com/photo-1548142813-c348350df52b?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="作者" class="author-avatar">
-                    <p>前端工程师 & UI设计师，专注于创建直观、高性能的用户体验。热爱分享技术知识和设计理念。</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link">
-                            <span class="material-symbols-outlined">mail</span>
-                        </a>
-                        <a href="#" class="social-link">
-                            <span class="material-symbols-outlined">share</span>
-                        </a>
-                        <a href="#" class="social-link">
-                            <span class="material-symbols-outlined">favorite</span>
-                        </a>
-                    </div>
-                </div>
+        <aside class="archive-aside reveal">
+            <div class="aside-label">INDEX / 标签</div>
+            <div class="tag-cloud">
+                {% for tag, count in tag_counts %}
+                <a href="{{ url_for('site.index', tag=tag) }}"{% if tag == selected_tag %} aria-current="true"{% endif %}><span>{{ tag }}</span><small>{{ "%02d"|format(count) }}</small></a>
+                {% endfor %}
             </div>
+            <div class="aside-note">
+                <span class="pulse"></span>
+                <p><strong>RSS 正常广播</strong><br>不依赖平台算法，按时间接收新文章。</p>
+                <a href="{{ url_for('site.feed') }}">订阅 feed.xml ↗</a>
+            </div>
+        </aside>
+    </div>
+</section>
 
-            <!-- 分类目录 -->
-            <div class="sidebar-card">
-                <h3 class="sidebar-title">
-                    <span class="material-symbols-outlined">category</span>
-                    分类目录
-                </h3>
-                <ul class="category-list">
-                    <li><a href="#"><span class="material-symbols-outlined">code</span> 前端开发 (12)</a></li>
-                    <li><a href="#"><span class="material-symbols-outlined">palette</span> UI/UX设计 (8)</a></li>
-                    <li><a href="#"><span class="material-symbols-outlined">database</span> 后端技术 (5)</a></li>
-                    <li><a href="#"><span class="material-symbols-outlined">bar_chart</span> 数据分析 (7)</a></li>
-                    <li><a href="#"><span class="material-symbols-outlined">language</span> 工具资源 (15)</a></li>
-                </ul>
-            </div>
-
-            <!-- 订阅区域 -->
-            <div class="sidebar-card">
-                <h3 class="sidebar-title">
-                    <span class="material-symbols-outlined">subscriptions</span>
-                    订阅更新
-                </h3>
-                <p>第一时间获取最新文章和技术分享</p>
-                <form class="subscription">
-                    <input type="email" class="subscribe-input" placeholder="您的邮箱地址" required>
-                    <button type="submit" class="subscribe-btn">订阅</button>
-                </form>
-            </div>
+<section class="open-call shell reveal">
+    <div class="open-call-index">03 / OPEN SOURCE</div>
+    <div class="open-call-content">
+        <h2>这不是一个围墙花园。<br><em>它是一份可以带走的起点。</em></h2>
+        <p>Fork、改名、写第一篇文章，然后把站点部署到任何支持容器的地方。遇到问题，欢迎留下可复现的 Issue；有更好的实现，欢迎发起 PR。</p>
+        <div class="open-call-actions">
+            <a class="button button-inverse" href="{{ site.github_url }}">在 GitHub 上参与 ↗</a>
+            <a href="{{ url_for('site.about') }}">了解项目原则 →</a>
         </div>
-    </main>
-
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section footer-about">
-                <div class="logo">
-                    <div class="google-colors">
-                        <span>G</span><span>o</span><span>o</span><span>g</span>
-                    </div>
-                    <span>Blogger</span>
-                </div>
-                <p>分享前沿技术见解和实践经验，探索设计和技术的完美融合。</p>
-                <p>持续学习，持续成长，创造有影响力的数字体验。</p>
-            </div>
-
-            <div class="footer-section">
-                <h3>快速链接</h3>
-                <ul class="footer-links">
-                    <li><a href="#">首页</a></li>
-                    <li><a href="#">技术文章</a></li>
-                    <li><a href="#">设计教程</a></li>
-                    <li><a href="#">资源工具</a></li>
-                    <li><a href="#">关于本站</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>联系我</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><span class="material-symbols-outlined">mail</span> contact@example.com</a></li>
-                    <li><a href="#"><span class="material-symbols-outlined">github</span> GitHub</a></li>
-                    <li><a href="#"><span class="material-symbols-outlined">twitter</span> Twitter</a></li>
-                    <li><a href="#"><span class="material-symbols-outlined">link</span> 个人网站</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="copyright">
-            © 2023 谷歌风格个人博客。保留所有权利。
-        </div>
-    </footer>
-
-    <script>
-        // 移动端菜单切换
-        document.getElementById('mobileMenu').addEventListener('click', function() {
-            document.getElementById('navLinks').classList.toggle('active');
-        });
-
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // 切换背景图片
-        const backgrounds = [
-            'static/wallpaper.png'
-        ];
-
-        let currentIndex = 0;
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'b' || e.key === 'B') {
-                currentIndex = (currentIndex + 1) % backgrounds.length;
-                document.body.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
-            }
-        });
-    </script>
-</body>
-</html>
+    </div>
+</section>
+{% endblock %}

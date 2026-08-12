@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#f1efe8">
+    <meta name="description" content="{% block description %}{{ site.description }}{% endblock %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="{{ site.name }}">
+    <meta property="og:title" content="{% block og_title %}{{ site.name }} · {{ site.tagline }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ site.description }}{% endblock %}">
+    <meta property="og:url" content="{{ site.url }}{{ request.path }}">
+    <link rel="canonical" href="{{ site.url }}{{ request.path }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ site.name }} RSS" href="{{ url_for('site.feed') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+    <title>{% block title %}{{ site.name }} · {{ site.tagline }}{% endblock %}</title>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+    <div class="page-grid" aria-hidden="true"></div>
+
+    <header class="site-header" data-header>
+        <div class="shell header-inner">
+            <a class="brand" href="{{ url_for('site.index') }}" aria-label="{{ site.name }} 首页">
+                <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true">
+                    <circle cx="22" cy="22" r="18"></circle>
+                    <path d="M13 22h18M22 13v18"></path>
+                    <circle class="brand-signal" cx="31" cy="13" r="3"></circle>
+                </svg>
+                <span class="brand-copy">
+                    <strong>{{ site.name }}</strong>
+                    <small>OPEN WEB OBSERVATORY</small>
+                </span>
+            </a>
+
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle>
+                <span></span><span></span>
+                <span class="sr-only">打开导航</span>
+            </button>
+
+            <nav class="site-nav" id="site-navigation" aria-label="主导航" data-navigation>
+                <a href="{{ url_for('site.index') }}"{% if request.endpoint == 'site.index' %} aria-current="page"{% endif %}>文章</a>
+                <a href="{{ url_for('site.about') }}"{% if request.endpoint == 'site.about' %} aria-current="page"{% endif %}>关于</a>
+                <a href="{{ url_for('site.feed') }}">RSS</a>
+                <a class="nav-github" href="{{ site.github_url }}" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell footer-grid">
+            <div>
+                <div class="footer-wordmark">GALILEO<span>°</span></div>
+                <p>一个站点，一组 Markdown 文件，和仍属于你的表达。</p>
+            </div>
+            <div class="footer-meta">
+                <p>MIT Licensed · No tracker by default</p>
+                <p>时间口径：Asia/Shanghai</p>
+                <p>© {{ current_year }} {{ site.author }}</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='site.js') }}" defer></script>
+</body>
+</html>

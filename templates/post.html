@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} · {{ site.name }}{% endblock %}
+{% block description %}{{ post.summary }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.summary }}{% endblock %}
+
+{% block content %}
+<article class="article-shell shell">
+    <header class="article-header reveal">
+        <a class="back-link" href="{{ url_for('site.index') }}">← 返回观测记录</a>
+        <div class="article-kicker">FIELD NOTE / {{ post.published_at.strftime('%Y.%m.%d') }}</div>
+        <h1>{{ post.title }}</h1>
+        <p class="article-summary">{{ post.summary }}</p>
+        <div class="article-meta-line">
+            <span>作者 {{ site.author }}</span>
+            <time datetime="{{ post.published_iso }}">{{ post.published_date }}</time>
+            <span>{{ post.reading_minutes }} 分钟阅读</span>
+        </div>
+        <div class="tag-row article-tags">{% for tag in post.tags %}<a href="{{ url_for('site.index', tag=tag) }}"># {{ tag }}</a>{% endfor %}</div>
+    </header>
+
+    <div class="article-layout">
+        <aside class="article-rail reveal" aria-label="文章信息">
+            <div class="rail-rule"></div>
+            <span>GALILEO NOTE</span>
+            <strong>{{ post.published_at.strftime('%j') }}</strong>
+            <small>DAY OF YEAR</small>
+        </aside>
+        <div class="prose reveal">{{ post.body_html|safe }}</div>
+    </div>
+
+    <footer class="article-end reveal">
+        <span>END OF SIGNAL</span>
+        <div></div>
+        <a href="{{ url_for('site.index') }}">继续浏览文章 →</a>
+    </footer>
+</article>
+{% endblock %}

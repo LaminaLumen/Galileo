@@ -1,0 +1,41 @@
+name: 功能提案
+description: 描述一个真实使用问题和范围可控的解决方向
+title: "[Proposal] "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Galileo 优先保持文件可迁移、默认隐私和单人可维护。提案请先描述问题，再讨论实现。
+  - type: textarea
+    attributes:
+      label: 谁遇到了什么问题？
+      description: 描述真实使用场景、频率和当前阻碍。
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 当前替代方式
+      description: 现在如何解决？为什么不够？
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 建议方向
+      description: 说明最小可行范围；不必先写完整技术设计。
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 数据、隐私与维护成本
+      description: 是否新增数据存储、第三方服务、依赖、迁移或长期升级责任？
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: 原则确认
+      options:
+        - label: 核心内容在没有新服务时仍可读取和导出。
+          required: true
+        - label: 我愿意协助实现、测试或文档中的至少一项。
+          required: false

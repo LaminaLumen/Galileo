@@ -1,0 +1,59 @@
+name: Bug 报告
+description: 提交一个可复现的功能、部署或兼容性问题
+title: "[Bug] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你帮助改进 Galileo。安全漏洞请改用私密安全报告，不要在这里粘贴密钥、证书、个人数据或生产日志。
+  - type: checkboxes
+    attributes:
+      label: 提交前检查
+      options:
+        - label: 我已搜索现有 Issue 和 Pull Request，没有找到同一问题。
+          required: true
+        - label: 这不是需要私密披露的安全漏洞。
+          required: true
+        - label: 我已移除日志中的凭据、IP、Cookie 和其他个人数据。
+          required: true
+  - type: input
+    attributes:
+      label: Galileo 版本
+      description: 提供 tag 或完整 commit SHA。
+      placeholder: v0.1.0 或 0123456789abcdef...
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: 运行方式
+      options:
+        - Docker Compose
+        - 本地 Python
+        - Kubernetes / 容器平台
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 环境
+      description: 操作系统、Python/Docker/浏览器版本，以及与问题相关的代理或入口组件。
+      placeholder: Windows 11；Docker Desktop 4.x；Chrome x；入口为 Caddy...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 复现步骤
+      description: 请提供最小、连续、可以由他人重复的步骤。
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 预期行为
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 实际行为与脱敏日志
+    validations:
+      required: true
