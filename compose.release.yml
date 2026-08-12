@@ -1,0 +1,49 @@
+name: galileo
+
+services:
+  app:
+    image: ghcr.io/laminalumen/galileo-app:${GALILEO_VERSION:-0.1.0}
+    environment:
+      SITE_AUTHOR: ${SITE_AUTHOR:-LaminaLumen}
+      SITE_DESCRIPTION: ${SITE_DESCRIPTION:-中文优先、隐私友好的自托管个人发布起步项目。}
+      SITE_NAME: ${SITE_NAME:-Galileo}
+      SITE_TAGLINE: ${SITE_TAGLINE:-把自己的坐标，写回开放网络}
+      SITE_URL: ${SITE_URL:-http://localhost:8080}
+      TZ: ${TZ:-Asia/Shanghai}
+    expose:
+      - "8000"
+    init: true
+    read_only: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    volumes:
+      - ./content:/app/content:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  web:
+    image: ghcr.io/laminalumen/galileo-web:${GALILEO_VERSION:-0.1.0}
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "${GALILEO_BIND_ADDRESS:-127.0.0.1}:${GALILEO_PORT:-8080}:8080"
+    read_only: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8080/nginx-health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

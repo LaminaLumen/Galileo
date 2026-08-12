@@ -10,15 +10,17 @@
 - 若公开到互联网：已配置 DNS、可信 TLS 证书和入口防火墙；
 - 运行主机与容器时区可不同，但应用配置必须明确为 IANA `Asia/Shanghai`。
 
-## 2. 本机或反向代理后运行
+## 2. 使用固定版本镜像运行（推荐）
 
 ```powershell
-git clone https://github.com/LaminaLumen/Galileo.git
+git clone --branch v0.1.0 --depth 1 https://github.com/LaminaLumen/Galileo.git
 Set-Location Galileo
 Copy-Item .env.example .env
-docker compose up --build --detach --wait
+docker compose -f compose.release.yml up --detach --wait
 Invoke-RestMethod http://localhost:8080/healthz
 ```
+
+这会拉取 `ghcr.io/laminalumen/galileo-app:0.1.0` 和 `ghcr.io/laminalumen/galileo-web:0.1.0`。两个镜像均支持 `linux/amd64` 与 `linux/arm64`，部署版本由 `.env` 中的 `GALILEO_VERSION` 显式控制。
 
 默认只绑定 `127.0.0.1:8080`。这适合本机预览，或由同一主机上的 Caddy、Traefik、Cloudflare Tunnel、Nginx 等可信入口继续代理。
 
@@ -37,11 +39,13 @@ TZ=Asia/Shanghai
 
 `SITE_URL` 会写入 canonical、RSS、robots.txt 和 sitemap，必须与读者实际访问地址一致，且末尾不要加 `/`。
 
-修改后重建：
+修改后重建服务：
 
 ```powershell
-docker compose up --build --detach --wait
+docker compose -f compose.release.yml up --detach --wait
 ```
+
+需要修改应用、模板或静态资源时，改用源码构建：`docker compose up --build --detach --wait`。
 
 ## 4. TLS
 
@@ -64,7 +68,7 @@ docker compose up --build --detach --wait
 
 ## 5. 内容更新
 
-内容位于 `content/posts`。标准发布过程：
+内容位于 `content/posts`，并由 `compose.release.yml` 只读挂载到应用容器。修改文章后刷新即可看到结果；正式发布前仍应执行内容校验和完整测试：
 
 ```powershell
 ruff check .
@@ -98,11 +102,11 @@ docker compose images
 ```powershell
 git fetch --tags
 git checkout <目标版本>
-docker compose build
-docker compose up --detach --wait
+docker compose -f compose.release.yml pull
+docker compose -f compose.release.yml up --detach --wait
 ```
 
-若健康检查或业务复核失败，切回此前记录的提交或 tag，重新执行 `docker compose up --build --detach --wait`。内容文件也由 Git 管理；回滚应用时需确认是否同时回滚内容，避免误删已发布文章。
+若健康检查或业务复核失败，把 `.env` 中的 `GALILEO_VERSION` 改回此前记录的版本，重新执行 `docker compose -f compose.release.yml up --detach --wait`。内容文件也由 Git 管理；回滚应用时需确认是否同时回滚内容，避免误删已发布文章。
 
 ## 7. 日志与时间
 

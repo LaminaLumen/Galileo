@@ -77,7 +77,23 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: 校验 Compose
-        run: docker compose config --quiet
+        run: |
+          docker compose config --quiet
+          docker compose -f compose.release.yml config --quiet
 
       - name: 构建镜像
         run: docker compose build
+
+      - name: 启动并执行健康检查
+        run: |
+          docker compose up --detach --wait
+          curl --fail --silent --show-error http://127.0.0.1:8080/healthz
+          curl --fail --silent --show-error http://127.0.0.1:8080/feed.xml > /dev/null
+
+      - name: 输出容器日志
+        if: failure()
+        run: docker compose logs --no-color
+
+      - name: 清理容器
+        if: always()
+        run: docker compose down --volumes

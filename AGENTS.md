@@ -9,4 +9,5 @@
 - 容器基线：应用使用 UID/GID 10001，Nginx 使用 UID/GID 101；保持只读根文件系统、`no-new-privileges` 和本机默认绑定。
 - 代码注释和项目文档以中文为主，仅为复杂逻辑、关键边界和外部约束添加注释。
 - 变更前后执行：`ruff check .`、`ruff format --check .`、`pytest`、`python scripts/check_secrets.py`；涉及容器时再执行 `docker compose config --quiet` 和完整健康检查。
+- 正式版本由 `vX.Y.Z` 标签触发 `.github/workflows/publish-images.yml`，发布 `galileo-app` 与 `galileo-web` 的 GHCR 多架构镜像；生产部署使用 `compose.release.yml` 并固定 `GALILEO_VERSION`，不要依赖 `latest`。
 - 用户可见行为、内容格式、环境变量或部署方式变化时，同步更新 README、相关文档与 CHANGELOG。
