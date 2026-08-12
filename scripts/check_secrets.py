@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
-from pathlib import Path
 
 
 def _repository_files() -> list[str]:
@@ -17,12 +16,10 @@ def _repository_files() -> list[str]:
     return [item.decode("utf-8") for item in result.stdout.split(b"\0") if item]
 
 
-def _scanner_path() -> Path:
-    executable = "detect-secrets.exe" if sys.platform == "win32" else "detect-secrets"
-    path = Path(sys.executable).with_name(executable)
-    if not path.is_file():
-        raise FileNotFoundError("未找到 detect-secrets，请先安装 requirements-dev.txt 中的开发依赖")
-    return path
+def _scanner_command() -> list[str]:
+    """通过当前解释器启动扫描器，兼容 venv、Conda 与各平台脚本目录。"""
+
+    return [sys.executable, "-m", "detect_secrets"]
 
 
 def main() -> int:
@@ -32,7 +29,7 @@ def main() -> int:
         return 0
 
     result = subprocess.run(
-        [str(_scanner_path()), "scan", *files],
+        [*_scanner_command(), "scan", *files],
         check=True,
         capture_output=True,
         text=True,

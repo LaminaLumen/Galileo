@@ -7,6 +7,7 @@
 中文优先、隐私友好的自托管个人发布起步项目。
 
 [![CI](https://github.com/LaminaLumen/Galileo/actions/workflows/ci.yml/badge.svg)](https://github.com/LaminaLumen/Galileo/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/LaminaLumen/Galileo?include_prereleases&label=Release&color=d3ff45&labelColor=141714)](https://github.com/LaminaLumen/Galileo/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-141714.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-d3ff45.svg?labelColor=141714)](pyproject.toml)
 
@@ -37,22 +38,22 @@
 | 内容来源 | `content/posts/*.md`，带轻量 front matter |
 | 页面 | 首页、文章详情、标签筛选、关于页、404 |
 | 订阅与发现 | RSS 2.0、sitemap.xml、robots.txt |
-| 运行方式 | Flask 应用工厂、Gunicorn、Nginx、Docker Compose |
+| 运行方式 | Flask 应用工厂、Gunicorn、Nginx、Docker Compose、GHCR 多架构镜像 |
 | 安全 | Markdown 原始 HTML 隔离、CSP、非 root 容器、只读文件系统 |
 | 质量 | pytest、Ruff、跨 Python 版本 GitHub Actions、依赖更新 |
 | 时区 | 显式使用 IANA `Asia/Shanghai`，文章时间必须带偏移 |
 
 ## 快速开始
 
-### Docker Compose（推荐）
+### 固定版本容器镜像（推荐）
 
 前置条件：Docker Desktop 或 Docker Engine 24+，并支持 Compose v2。
 
 ```powershell
-git clone https://github.com/LaminaLumen/Galileo.git
+git clone --branch v0.1.0 --depth 1 https://github.com/LaminaLumen/Galileo.git
 Set-Location Galileo
 Copy-Item .env.example .env
-docker compose up --build
+docker compose -f compose.release.yml up --detach --wait
 ```
 
 打开 [http://localhost:8080](http://localhost:8080)。默认只绑定 `127.0.0.1`，不会直接暴露到局域网或公网。
@@ -60,7 +61,20 @@ docker compose up --build
 停止并清理容器：
 
 ```powershell
-docker compose down
+docker compose -f compose.release.yml down
+```
+
+`compose.release.yml` 默认固定使用 `0.1.0` 镜像，并支持 `linux/amd64` 与 `linux/arm64`。升级时请显式修改 `.env` 中的 `GALILEO_VERSION`，不要在生产环境依赖 `latest`。
+
+### 从源码构建
+
+如果需要修改应用、模板或样式，使用仓库默认 Compose：
+
+```powershell
+git clone https://github.com/LaminaLumen/Galileo.git
+Set-Location Galileo
+Copy-Item .env.example .env
+docker compose up --build --detach --wait
 ```
 
 ### 本地 Python
@@ -118,6 +132,7 @@ draft: false
 | `SITE_AUTHOR` | `LaminaLumen` | 页面与 RSS 作者标识 |
 | `SITE_URL` | `http://localhost:8080` | canonical、RSS 与 sitemap 的公开根地址 |
 | `TZ` | `Asia/Shanghai` | IANA 时区名称 |
+| `GALILEO_VERSION` | `0.1.0` | `compose.release.yml` 拉取的固定镜像版本 |
 | `GALILEO_BIND_ADDRESS` | `127.0.0.1` | 容器入口绑定地址 |
 | `GALILEO_PORT` | `8080` | 容器入口端口 |
 
@@ -152,6 +167,7 @@ Galileo 由主要维护者负责方向、评审和发布，采用轻量治理模
 - 安全问题不要公开创建 Issue，请遵循 [安全政策](SECURITY.md)；
 - 版本规划见 [路线图](ROADMAP.md)；
 - 版本变化见 [变更记录](CHANGELOG.md)；
+- 当前发布说明见 [Galileo v0.1.0](docs/releases/v0.1.0.md)；
 - 维护职责与决策方式见 [治理说明](GOVERNANCE.md)。
 
 ## 许可证
